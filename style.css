@@ -1,0 +1,150 @@
+*
+{
+  box-sizing: content-box;
+}
+
+body
+{
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* header */
+header
+{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: aliceblue;
+}
+
+.button
+{
+  font-size: 1rem;
+  line-height: 3vh;
+  line-height: 3dvh;
+}
+
+/* main */
+
+.container
+{
+  display: flex;
+  flex-direction: column;
+}
+
+#add-book
+{
+  align-self: center;
+  width: min(7.5rem, 25%);
+}
+
+.book-container
+{
+  display: grid;
+}
+
+.book
+{
+
+}
+
+/*footer*/
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+footer > h3 {
+  text-align: center;
+}
+
+/* modal */
+.modal {
+  display: none; /* Hidden by default */
+  justify-content: center;
+  align-items: center;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  width: min(375px, 40%);
+  margin: 5% auto; /* Only centers horizontally not vertically! */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-75%) scale(1);
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  border-radius: 5%;
+  padding: 1.5rem;
+}
+
+.feed-form {
+  display: flex;
+  flex-direction: column;
+  width: min(350px, 100%);
+  gap: 1rem;
+}
+
+.feed-form > h2 
+{
+  align-self: center;
+}
+
+.feed-form > input {
+  height: 54px;
+  border-radius: 5px;
+  background: white;
+  border: none;
+  padding: 0 20px;
+  font-weight: 300;
+  font-size: 14px;
+  color: #4B4B4B;
+}
+
+.button_submit:hover, .feed-form input:hover {
+  transform: scale(1.009);
+  box-shadow: 0px 0px 3px 0px #212529;
+}
+
+.button_submit {
+  height: 54px;
+  font-size: 14px;
+  color: white;
+  background: red;
+  border-radius: 5px;
+  border: none;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 0;
+}
+
+.flex-center-align
+{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.overlay.active {
+  display: block;
+}
