@@ -27,13 +27,14 @@
   <div class="modal" id="myModal">
       <form id="consultation-form" class="feed-form" action="#" autocomplete="off">
         <h2>Add new book</h2>
-        <input name="title" required placeholder="Title" autofocus>
-        <input name="author" required placeholder="Author">
-        <input name="pages" required placeholder="Pages" type="number"> 
+        <input id="title" name="title" required placeholder="Title" autofocus>
+        <p class="error-msg">Book already in library!</p>
+        <input id="author" name="author" required placeholder="Author">
+        <input id="pages" name="pages" required placeholder="Pages" type="number"> 
         <div class="flex-center-align">
-          <label for="read">Already read it?</label><input type="checkbox" id="read" name="read">
+          <label for="read">Already read it?</label><input id="read" type="checkbox" id="read" name="read">
         </div>
-        <button class="button_submit">Save</button>
+        <button class="button-submit">Save</button>
       </form>
   </div>
   <div class="overlay" id="overlay"></div>
