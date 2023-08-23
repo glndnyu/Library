@@ -47,7 +47,9 @@ const author = document.getElementById('author')
 const pages = document.getElementById('pages')
 const read = document.getElementById('read') 
 const error = document.querySelector('.error-msg')
+const bookContainer = document.querySelector('.book-container')
 
+updateLibraryCards();
 
 addBookBtn.onclick = function() {
   form.reset()
@@ -76,12 +78,27 @@ function exitModal() {
 function checkBook(newBook){
   if(!library.isBookInLibrary(newBook)){
     library.addBook(newBook)
-    exitModal();
+    exitModal()
     return
   }
   error.classList.add('active')
 }
 
 function updateLibraryCards(){
-  
+  bookContainer.innerHTML = ''
+  library.books.forEach(element => {
+    createBookCard(element)
+  })
+}
+
+function createBookCard(element){
+  const bookCard = document.createElement('div')
+  bookCard.classList.add('book')
+  Object.keys(element).forEach((key) => {
+    const para = document.createElement('p')
+    para.appendChild(document.createTextNode(element[key]))
+    bookCard.appendChild(para)
+  })
+
+  bookContainer.appendChild(bookCard)
 }
