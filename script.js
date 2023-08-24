@@ -14,11 +14,11 @@ function Library() {
 }
 
 Library.prototype.addBook = function(newBook) {
-    this.books.push(newBook)
+  this.books.push(newBook)
 }
 
-Library.prototype.removeBook = function(book) {
-  this.books.splice(this.books.indexOf(book), 1)
+Library.prototype.removeBook = function(title) {
+  this.books = this.books.filter((book) => book.title !== title)
 }
 
 Library.prototype.getBook = function(title) {
@@ -47,18 +47,19 @@ const author = document.getElementById('author')
 const pages = document.getElementById('pages')
 const read = document.getElementById('read') 
 const error = document.querySelector('.error-msg')
-const bookContainer = document.querySelector('.book-container')
+const bookContainer = document.querySelector('.book-container') 
 
 updateLibraryCards();
 
-addBookBtn.onclick = function() {
+addBookBtn.onclick = addBook
+overLay.onclick = exitModal
+form.addEventListener("submit", handleSubmit)
+
+function addBook() {
   form.reset()
   modal.classList.add('active')
   overLay.classList.add('active')
 }
-
-overLay.onclick = exitModal
-form.addEventListener("submit", handleSubmit)
 
 function handleSubmit(e) {
   e.preventDefault()
@@ -85,20 +86,73 @@ function checkBook(newBook){
 }
 
 function updateLibraryCards(){
-  bookContainer.innerHTML = ''
+  clearLibrary()
   library.books.forEach(element => {
     createBookCard(element)
   })
+  toggleListener()
+}
+
+function clearLibrary() {
+  while (bookContainer.lastChild)
+    bookContainer.removeChild(bookContainer.lastChild)
 }
 
 function createBookCard(element){
   const bookCard = document.createElement('div')
-  bookCard.classList.add('book')
+  const deleteBookButton = document.createElement('button')
+  const readBookButton = document.createElement('button')
+  let title;
   Object.keys(element).forEach((key) => {
-    const para = document.createElement('p')
-    para.appendChild(document.createTextNode(element[key]))
-    bookCard.appendChild(para)
+    if(key !== 'isRead'){
+      const para = document.createElement('p')
+      para.appendChild(document.createTextNode(element[key]))
+      if(key === 'title'){
+        para.classList.add('heading')
+        title = element[key];
+      }
+      if(key === 'pages')
+        para.appendChild(document.createTextNode(" pages"))
+      bookCard.appendChild(para)
+    }
+    else {
+      readBookButton.appendChild(document.createTextNode(element[key] ? 'Read' : 'Not Read'))
+      readBookButton.classList.add('readBookButton')
+      readBookButton.dataset.title = title;
+      bookCard.appendChild(readBookButton)
+    }
   })
 
+  deleteBookButton.appendChild(document.createTextNode('Delete'))
+  deleteBookButton.classList.add('deleteBookButton')
+  deleteBookButton.dataset.title = title;
+  bookCard.appendChild(deleteBookButton)
+  bookCard.classList.add('card')
+
   bookContainer.appendChild(bookCard)
+}
+
+function toggleListener() {
+  const deleteButton = document.querySelectorAll('.deleteBookButton')
+  const readButton = document.querySelectorAll('.readBookButton')
+  deleteButton.forEach(button => button.addEventListener('click', deleteBook))
+  readButton.forEach(button => button.addEventListener('click', toggleRead))
+}
+
+function deleteBook(e) {
+  console.log(e.target.dataset.title)
+  library.removeBook(e.target.dataset.title)
+  updateLibraryCards()
+}
+
+function toggleRead(e) {
+  let read = library.getBook(e.target.dataset.title)
+  if(read.isRead) {
+    e.target.innerHTML = 'Not Read'
+    read.isRead = false
+  }
+  else {
+    e.target.innerHTML = 'Read'
+    read.isRead = true
+  }
 }
