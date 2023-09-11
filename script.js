@@ -1,32 +1,36 @@
-function Book(title, author, pages, isRead) {
-  this.title = title
-  this.author = author
-  this.pages = pages
-  this.isRead = isRead ? true : false
+class Book {
+    constructor(title, author, pages, isRead) {
+        this.title = title
+        this.author = author
+        this.pages = pages
+        this.isRead = isRead ? true : false
+    }
 }
 
-function Library() {
-  if (this instanceof Library === false) {
-    return new Library()
-  }
-  
-  this.books = new Array()
-}
+class Library {
+    #books;
+    constructor() {
+          this.#books = new Array()
+    }
+    addBook(newBook) {
+        this.#books.push(newBook)
+    }
 
-Library.prototype.addBook = function(newBook) {
-  this.books.push(newBook)
-}
+    removeBook(title) {
+        this.#books = this.#books.filter((book) => book.title !== title)
+    }
 
-Library.prototype.removeBook = function(title) {
-  this.books = this.books.filter((book) => book.title !== title)
-}
+    getBook(title) {
+        return this.#books.find((book) => book.title === title)
+    }
 
-Library.prototype.getBook = function(title) {
-  return this.books.find((book) => book.title === title)
-}
+    getBooks() {
+        return this.#books
+    }
 
-Library.prototype.isBookInLibrary = function(newBook) {
-  return this.books.some((book) => book.title === newBook.title)
+    isBookInLibrary(newBook) {
+        return this.#books.some((book) => book.title === newBook.title)
+    }
 }
 
 const library = new Library()
@@ -59,106 +63,107 @@ addBookBtn.onclick = addBook
 overLay.onclick = exitModal
 form.addEventListener("submit", handleSubmit)
 
-function addBook() {
-  form.reset()
-  modal.classList.add('active')
-  overLay.classList.add('active')
+function addBook(e) {
+    e.stopPropagation();
+    form.reset()
+    modal.classList.add('active')
+    overLay.classList.add('active')
 }
 
 function handleSubmit(e) {
-  e.preventDefault()
-  const formData = new FormData(e.target)
-  const formProps = Object.fromEntries(formData)
-  const newBook = new Book(...Object.values(formProps))
-  checkBook(newBook)
-  updateLibraryCards();  
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const formProps = Object.fromEntries(formData)
+    const newBook = new Book(...Object.values(formProps))
+    checkBook(newBook)
+    updateLibraryCards();  
 }
 
 function exitModal() {
-  modal.classList.remove('active')
-  overLay.classList.remove('active')
-  error.classList.remove('active')
+    modal.classList.remove('active')
+    overLay.classList.remove('active')
+    error.classList.remove('active')
 }  
 
 function checkBook(newBook){
-  if(!library.isBookInLibrary(newBook)){
-    library.addBook(newBook)
-    exitModal()
-    return
-  }
-  error.classList.add('active')
+    if(!library.isBookInLibrary(newBook)){
+        library.addBook(newBook)
+        exitModal()
+        return
+    }
+    error.classList.add('active')
 }
 
 function updateLibraryCards(){
-  clearLibrary()
-  library.books.forEach(element => {
-    createBookCard(element)
-  })
-  toggleListener()
+    clearLibrary()
+    library.getBooks().forEach(element => {
+        createBookCard(element)
+    })
+    toggleListener()
 }
 
 function clearLibrary() {
-  while (bookContainer.lastChild)
-    bookContainer.removeChild(bookContainer.lastChild)
+    while (bookContainer.lastChild)
+        bookContainer.removeChild(bookContainer.lastChild)
 }
 
 function createBookCard(element){
-  const bookCard = document.createElement('div')
-  const deleteBookButton = document.createElement('button')
-  const readBookButton = document.createElement('button')
-  let title;
-  Object.keys(element).forEach((key) => {
-    if(key !== 'isRead'){
-      const para = document.createElement('p')
-      para.appendChild(document.createTextNode(element[key]))
-      if(key === 'title'){
-        para.classList.add('heading')
-        title = element[key];
-      }
-      if(key === 'pages')
-        para.appendChild(document.createTextNode(" pages"))
-      bookCard.appendChild(para)
-    }
-    else {
-      readBookButton.appendChild(document.createTextNode(element[key] ? 'Read' : 'Not Read'))
-      readBookButton.classList.add('readBookButton')
-      readBookButton.dataset.title = title;
-      bookCard.appendChild(readBookButton)
-    }
-  })
+    const bookCard = document.createElement('div')
+    const deleteBookButton = document.createElement('button')
+    const readBookButton = document.createElement('button')
+    let title;
+    Object.keys(element).forEach((key) => {
+        if(key !== 'isRead'){
+        const para = document.createElement('p')
+        para.appendChild(document.createTextNode(element[key]))
+        if(key === 'title'){
+            para.classList.add('heading')
+            title = element[key];
+        }
+        if(key === 'pages')
+            para.appendChild(document.createTextNode(" pages"))
+        bookCard.appendChild(para)
+        }
+        else {
+        readBookButton.appendChild(document.createTextNode(element[key] ? 'Read' : 'Not Read'))
+        readBookButton.classList.add('readBookButton')
+        readBookButton.dataset.title = title;
+        bookCard.appendChild(readBookButton)
+        }
+    })
 
-  deleteBookButton.appendChild(document.createTextNode('Delete'))
-  deleteBookButton.classList.add('deleteBookButton')
-  deleteBookButton.dataset.title = title;
-  bookCard.appendChild(deleteBookButton)
-  bookCard.classList.add('card')
+    deleteBookButton.appendChild(document.createTextNode('Delete'))
+    deleteBookButton.classList.add('deleteBookButton')
+    deleteBookButton.dataset.title = title;
+    bookCard.appendChild(deleteBookButton)
+    bookCard.classList.add('card')
 
-  bookContainer.appendChild(bookCard)
+    bookContainer.appendChild(bookCard)
 }
 
 function toggleListener() {
-  const deleteButton = document.querySelectorAll('.deleteBookButton')
-  const readButton = document.querySelectorAll('.readBookButton')
-  deleteButton.forEach(button => button.addEventListener('click', deleteBook))
-  readButton.forEach(button => button.addEventListener('click', toggleRead))
+    const deleteButton = document.querySelectorAll('.deleteBookButton')
+    const readButton = document.querySelectorAll('.readBookButton')
+    deleteButton.forEach(button => button.addEventListener('click', deleteBook))
+    readButton.forEach(button => button.addEventListener('click', toggleRead))
 }
 
 function deleteBook(e) {
-  console.log(e.target.dataset.title)
-  library.removeBook(e.target.dataset.title)
-  updateLibraryCards()
+    console.log(e.target.dataset.title)
+    library.removeBook(e.target.dataset.title)
+    updateLibraryCards()
 }
 
 function toggleRead(e) {
-  let read = library.getBook(e.target.dataset.title)
-  if(read.isRead) {
-    e.target.innerHTML = 'Not Read'
-    read.isRead = false
-  }
-  else {
-    e.target.innerHTML = 'Read'
-    read.isRead = true
-  }
+    let read = library.getBook(e.target.dataset.title)
+    if(read.isRead) {
+        e.target.innerHTML = 'Not Read'
+        read.isRead = false
+    }
+    else {
+        e.target.innerHTML = 'Read'
+        read.isRead = true
+    }
 }
 
 /**
@@ -168,33 +173,33 @@ function toggleRead(e) {
 * Fall back to light mode.
 */
 function calculateSettingAsThemeString({ localStorageTheme, systemSettingDark }) {
-  if (localStorageTheme !== null) {
-    return localStorageTheme;
-  }
+    if (localStorageTheme !== null) {
+        return localStorageTheme;
+    }
 
-  if (systemSettingDark.matches) {
-    return "dark";
-  }
+    if (systemSettingDark.matches) {
+        return "dark";
+    }
 
-  return "light";
+    return "light";
 }
 
 /**
 * Utility function to update the button text and aria-label.
 */
 function updateButton({ buttonEl, isDark }) {
-  const newCta = isDark ? "Change to light theme" : "Change to dark theme";
-  // use an aria-label if you are omitting text on the button
-  // and using a sun/moon icon, for example
-  buttonEl.setAttribute("aria-label", newCta);
-  buttonEl.innerText = newCta;
+    const newCta = isDark ? "Change to light theme" : "Change to dark theme";
+    // use an aria-label if you are omitting text on the button
+    // and using a sun/moon icon, for example
+    buttonEl.setAttribute("aria-label", newCta);
+    buttonEl.innerText = newCta;
 }
 
 /**
 * Utility function to update the theme setting on the html tag
 */
 function updateThemeOnHtmlEl({ theme }) {
-  document.querySelector("html").setAttribute("data-theme", theme);
+    document.querySelector("html").setAttribute("data-theme", theme);
 }
 
 
@@ -224,11 +229,11 @@ updateThemeOnHtmlEl({ theme: currentThemeSetting });
 * 4. Add an event listener to toggle the theme
 */
 button.addEventListener("click", (event) => {
-  const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
+    const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
 
-  localStorage.setItem("theme", newTheme);
-  updateButton({ buttonEl: button, isDark: newTheme === "dark" });
-  updateThemeOnHtmlEl({ theme: newTheme });
+    localStorage.setItem("theme", newTheme);
+    updateButton({ buttonEl: button, isDark: newTheme === "dark" });
+    updateThemeOnHtmlEl({ theme: newTheme });
 
-  currentThemeSetting = newTheme;
+    currentThemeSetting = newTheme;
 }); 
