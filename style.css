@@ -1,7 +1,4 @@
 html {
-    --header-ht: 15vh;
-    --footer-ht: 10vh;
-    --main-ht: calc(100vh - var(--footer-ht) - var(--header-ht));
 
 }
 
@@ -22,8 +19,6 @@ html {
 
 body
 {
-    display: flex;
-  flex-direction: column;
   height: 100vh;
   background-color: var(--color-bg);
   color: var(--color-fg);
@@ -41,7 +36,6 @@ header
   justify-content: space-around;
   align-items: center;
   background-color: black;
-  height: var(--header-ht);
 }
 
 /* main */
@@ -129,7 +123,7 @@ main {
   overflow-y: auto;
   gap: 1rem ;
   width: 90%;
-  height: calc(var(--main-ht) - 60px);
+  height: var(--book-container);
   scrollbar-gutter: stable;
 }
 
@@ -184,7 +178,6 @@ footer {
   justify-content: center;
   gap: 10px;
   width: 100%;
-  height: var(--footer-ht);
 }
 
 footer > h3 {

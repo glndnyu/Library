@@ -54,7 +54,30 @@ const pages = document.getElementById('pages')
 const read = document.getElementById('read') 
 const error = document.querySelector('.error-msg')
 const bookContainer = document.querySelector('.book-container') 
+const header = document.querySelector('header')
+const footer = document.querySelector('footer')
 
+const resize = () => {
+    const headerHeight = header.offsetHeight
+    const footerHeight = footer.offsetHeight
+    const mainHeight = window.innerHeight - headerHeight - footerHeight - 32
+    const addButtonHeight = addBookBtn.offsetHeight + 16
+    const bookContainerHeight = mainHeight - addButtonHeight
+    
+    console.log(window.innerHeight, mainHeight, headerHeight, footerHeight)
+    
+    document.documentElement.style.setProperty(
+        "--main-ht",
+        mainHeight + 'px'
+    )
+    document.documentElement.style.setProperty(
+        "--book-container",
+        bookContainerHeight + 'px'
+    )
+}
+
+window.addEventListener('load', resize)
+window.addEventListener('resize', resize)
 
 
 updateLibraryCards();
